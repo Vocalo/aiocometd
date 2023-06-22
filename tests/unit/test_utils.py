@@ -137,12 +137,12 @@ class TestDefer(TestCase):
     async def test_defer(self, sleep):
         argument = object()
         delay = 10
-        wrapper = defer(self.coro_func, delay, loop=self.loop)
+        wrapper = defer(self.coro_func, delay)
 
         result = await wrapper(argument)
 
         self.assertIs(result, argument)
-        sleep.assert_called_with(delay, loop=self.loop)
+        sleep.assert_called_with(delay)
 
     @mock.patch("aiocometd.utils.asyncio.sleep")
     async def test_defer_no_loop(self, sleep):
@@ -153,7 +153,7 @@ class TestDefer(TestCase):
         result = await wrapper(argument)
 
         self.assertIs(result, argument)
-        sleep.assert_called_with(delay, loop=None)
+        sleep.assert_called_with(delay)
 
     @mock.patch("aiocometd.utils.asyncio.sleep")
     async def test_defer_none_delay(self, sleep):
@@ -186,7 +186,7 @@ class TestDefer(TestCase):
         with self.assertRaises(asyncio.CancelledError):
             await wrapper(argument)
 
-        sleep.assert_called_with(delay, loop=None)
+        sleep.assert_called_with(delay)
 
 
 class TestIsAuthErrorMessage(TestCase):
